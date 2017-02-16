@@ -63,11 +63,17 @@ sub app {
         return [200, "OK", \@res];
     }
     #my $meta = Acme::MetaSyntactic->new($theme);
+    my @names;
     if (defined $cat) {
-        return [200, "OK", ${"$pkg\::MultiList"}{$cat}];
+        @names = @{ ${"$pkg\::MultiList"}{$cat} // [] };
     } else {
-        return [200, "OK", \@{"$pkg\::List"}];
+        @names = @{"$pkg\::List"};
     }
+    if ($args{shuffle}) {
+        require List::Util;
+        @names = List::Util::shuffle(@names);
+    }
+    return [200, "OK", \@names];
 }
 
 require Perinci::CmdLine::Any;
