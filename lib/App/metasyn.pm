@@ -96,6 +96,10 @@ sub metasyn {
         @names = @{ ${"$pkg\::MultiList"}{$cat} // [] };
     } else {
         @names = @{"$pkg\::List"};
+        unless (@names) {
+            @names = map { @{ ${"$pkg\::MultiList"}{$_} } }
+                sort keys %{"$pkg\::MultiList"};
+        }
     }
     if ($args{shuffle}) {
         require List::Util;
