@@ -1,3 +1,11 @@
+0.003   2017-02-24 (PERLANCAR)
+
+	- No functional changes.
+
+	- Tweak Rinci function metadata: give maximum result lines for
+	  example outputs.
+
+
 0.002   2017-02-17 (PERLANCAR)
 
 	- [ux] When a multilist theme is requested without category, list
