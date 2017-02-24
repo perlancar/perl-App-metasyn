@@ -47,18 +47,22 @@ _
         {
             summary => 'List all installed themes',
             argv => [qw/-l/],
+            'x.doc.max_result_lines' => 10,
         },
         {
             summary => 'List all names from a theme',
             argv => [qw/foo/],
+            'x.doc.max_result_lines' => 10,
         },
         {
             summary => 'List all names from a theme in random order',
             argv => [qw(christmas/elf --shuffle)],
+            'x.doc.max_result_lines' => 10,
         },
         {
             summary => 'List all categories from a theme',
             argv => [qw(christmas --categories)],
+            'x.doc.max_result_lines' => 10,
         },
     ],
     links => [
