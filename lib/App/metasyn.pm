@@ -93,7 +93,7 @@ sub metasyn {
                 my @cats;
                 @cats = $pkg->categories if $pkg->can("categories");
                 if (@cats) {
-                    push @res, "$th/$_" for @cats;
+                    push @res, "$th/$_" for sort @cats;
                 } else {
                     push @res, $th;
                 }
@@ -114,7 +114,7 @@ sub metasyn {
 
     if ($args{categories}) {
         my @res;
-        eval { @res = $pkg->categories };
+        eval { @res = sort $pkg->categories };
         #warn if $@;
         return [200, "OK", \@res];
     }
