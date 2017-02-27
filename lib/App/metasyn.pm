@@ -50,6 +50,11 @@ _
             'x.doc.max_result_lines' => 10,
         },
         {
+            summary => 'List all installed themes, along with all their categories',
+            argv => [qw/-l -c/],
+            'x.doc.max_result_lines' => 10,
+        },
+        {
             summary => 'List all names from a theme',
             argv => [qw/foo/],
             'x.doc.max_result_lines' => 10,
@@ -61,7 +66,7 @@ _
         },
         {
             summary => 'List all categories from a theme',
-            argv => [qw(christmas --categories)],
+            argv => [qw(christmas -c)],
             'x.doc.max_result_lines' => 10,
         },
     ],
@@ -77,8 +82,27 @@ sub metasyn {
 
     my $action = $args{action};
 
-    return [200, "OK", [Acme::MetaSyntactic->new->themes]]
-        if $action eq 'list-themes';
+    if ($action eq 'list-themes') {
+        my @res;
+        for my $th (Acme::MetaSyntactic->new->themes) {
+            if ($args{categories}) {
+                my $pkg = "Acme::MetaSyntactic::$th";
+                (my $pkg_pm = "$pkg.pm") =~ s!::!/!g;
+                return [500, "Can't load $pkg: $@"]
+                    unless (eval { require $pkg_pm; 1 });
+                my @cats;
+                @cats = $pkg->categories if $pkg->can("categories");
+                if (@cats) {
+                    push @res, "$th/$_" for @cats;
+                } else {
+                    push @res, $th;
+                }
+            } else {
+                push @res, $th;
+            }
+        }
+        return [200, "OK", \@res];
+    }
 
     my $theme = $args{theme};
     return [400, "Please specify theme"] unless $theme;
