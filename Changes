@@ -1,3 +1,9 @@
+0.004   2017-02-27 (PERLANCAR)
+
+	- You can now use -lc to list all themes with their categories
+	  (e.g. theme1/cat1, theme1/cat2, and so on).
+
+
 0.003   2017-02-24 (PERLANCAR)
 
 	- No functional changes.
