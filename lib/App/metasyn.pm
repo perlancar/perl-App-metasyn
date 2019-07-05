@@ -32,7 +32,7 @@ _
             pos => 0,
             completion => sub {
                 require Complete::Acme::MetaSyntactic;
-                Complete::Acme::MetaSyntactic::complete_meta_themes_and_categories(@_);
+                Complete::Acme::MetaSyntactic::complete_meta_theme_and_category(@_);
             },
         },
         shuffle => {
