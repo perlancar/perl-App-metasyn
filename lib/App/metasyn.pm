@@ -9,6 +9,18 @@ use warnings;
 
 our %SPEC;
 
+sub _shuffle_and_limit {
+    my ($res, $args) = @_;
+    if ($args->{shuffle}) {
+        require List::Util;
+        $res = [List::Util::shuffle(@$res)];
+    }
+    if (defined $args->{number} && $args->{number} > 0 && @$res > $args->{number}) {
+        $res = [@{$res}[0 .. $args->{number}-1]];
+    }
+    $res;
+}
+
 $SPEC{metasyn} = {
     v => 1.1,
     summary => 'Alternative front-end to Acme::MetaSyntactic',
@@ -38,6 +50,11 @@ _
         shuffle => {
             schema => ['bool*', is=>1],
         },
+        number => {
+            summary => 'Limit only return this number of results',
+            schema => 'posint*',
+            cmdline_aliases => {n=>{}},
+        },
         categories => {
             schema => ['bool*', is=>1],
             cmdline_aliases => {c=>{}},
@@ -50,6 +67,10 @@ _
             'x.doc.max_result_lines' => 10,
         },
         {
+            summary => 'List 3 random themes',
+            argv => [qw/-l -n3 --shuffle/],
+        },
+        {
             summary => 'List all installed themes, along with all their categories',
             argv => [qw/-l -c/],
             'x.doc.max_result_lines' => 10,
@@ -60,8 +81,8 @@ _
             'x.doc.max_result_lines' => 10,
         },
         {
-            summary => 'List all names from a theme in random order',
-            argv => [qw(christmas/elf --shuffle)],
+            summary => 'List all names from a theme in random order, return only 3',
+            argv => [qw(christmas/elf -n3 --shuffle)],
             'x.doc.max_result_lines' => 10,
         },
         {
@@ -101,7 +122,7 @@ sub metasyn {
                 push @res, $th;
             }
         }
-        return [200, "OK", \@res];
+        return [200, "OK", _shuffle_and_limit(\@res, \%args)];
     }
 
     my $theme = $args{theme};
@@ -116,7 +137,7 @@ sub metasyn {
         my @res;
         eval { @res = sort $pkg->categories };
         #warn if $@;
-        return [200, "OK", \@res];
+        return [200, "OK", _shuffle_and_limit(\@res, \%args)];
     }
     #my $meta = Acme::MetaSyntactic->new($theme);
     my @names;
@@ -129,11 +150,7 @@ sub metasyn {
                 sort keys %{"$pkg\::MultiList"};
         }
     }
-    if ($args{shuffle}) {
-        require List::Util;
-        @names = List::Util::shuffle(@names);
-    }
-    return [200, "OK", \@names];
+    return [200, "OK", _shuffle_and_limit(\@names, \%args)];
 }
 
 1;
