@@ -56,7 +56,12 @@ _
             },
         },
         shuffle => {
-            schema => ['bool*', is=>1],
+            schema => 'true*',
+            cmdline_aliases => {R=>{}},
+        },
+        random_theme => {
+            schema => 'true*',
+            cmdline_aliases => {T=>{}},
         },
         number => {
             summary => 'Limit only return this number of results',
@@ -64,38 +69,64 @@ _
             cmdline_aliases => {n=>{}},
         },
         categories => {
-            schema => ['bool*', is=>1],
+            schema => 'true*',
             cmdline_aliases => {c=>{}},
         },
     },
     examples => [
+        # listing names
         {
-            summary => 'List all installed themes',
+            summary => 'List all names from the default theme, foo',
+            argv => [qw//],
+            'x.doc.max_result_lines' => 10,
+        },
+        {
+            summary => 'Return a single random name from the default theme (equivalent of: meta)',
+            argv => [qw/-n1 -R/],
+        },
+        {
+            summary => 'List all names from a theme',
+            argv => [qw/christmas/],
+            'x.doc.max_result_lines' => 10,
+        },
+        {
+            summary => 'List all names from a category of a theme in random order, return only 3 (equivalent of: meta christmas/elf 3)',
+            argv => [qw(christmas/elf -n3 -R)],
+        },
+        {
+            summary => 'Return a single random name from a theme (equivalent of: meta christmas)',
+            argv => [qw(christmas -n1 -R)],
+        },
+        {
+            summary => 'Return a single random name from a random theme',
+            argv => [qw(-T -n1 -R)],
+        },
+
+        # listing themes
+        {
+            summary => 'List all installed themes (equivalent of: meta --themes)',
             argv => [qw/-l/],
             'x.doc.max_result_lines' => 10,
         },
         {
-            summary => 'List 3 random themes',
-            argv => [qw/-l -n3 --shuffle/],
+            summary => 'List 3 random themes (equivalent of: meta --themes | shuf | head -n3)',
+            argv => [qw/-l -n3 -R/],
         },
         {
             summary => 'List all installed themes, along with all their categories',
             argv => [qw/-l -c/],
             'x.doc.max_result_lines' => 10,
         },
-        {
-            summary => 'List all names from a theme',
-            argv => [qw/foo/],
-            'x.doc.max_result_lines' => 10,
-        },
-        {
-            summary => 'List all names from a theme in random order, return only 3',
-            argv => [qw(christmas/elf -n3 --shuffle)],
-            'x.doc.max_result_lines' => 10,
-        },
+
+        # listing categories
         {
             summary => 'List all categories from a theme',
             argv => [qw(christmas -c)],
+            'x.doc.max_result_lines' => 10,
+        },
+        {
+            summary => 'List 2 categories from a theme, in random order',
+            argv => [qw(christmas -c -n2 -R)],
             'x.doc.max_result_lines' => 10,
         },
     ],
@@ -133,8 +164,15 @@ sub metasyn {
         return [200, "OK", _shuffle_and_limit(\@res, \%args)];
     }
 
-    my $theme = $args{theme};
-    return [400, "Please specify theme"] unless $theme;
+    my $theme;
+    if ($args{theme}) {
+        $theme = $args{theme};
+    } elsif ($args{random_theme}) {
+        my @themes = Acme::MetaSyntactic->new->themes;
+        $theme = $themes[rand @themes];
+    } else {
+        $theme = 'foo';
+    }
     my $cat = $theme =~ s{/(.+)\z}{} ? $1 : undef;
 
     my $pkg = "Acme::MetaSyntactic::$theme";
