@@ -26,9 +26,17 @@ $SPEC{metasyn} = {
     summary => 'Alternative front-end to Acme::MetaSyntactic',
     description => <<'_',
 
-This script is an alternative front-end to <pm:Acme::MetaSyntactic>. Compared to
-the official CLI <prog:meta>, this CLI is more oriented towards listing names
-instead of giving you one or several random names.
+This script is an alternative front-end for <pm:Acme::MetaSyntactic>. Compared
+to the official CLI <prog:meta>, this CLI currently does not retrieve
+themes/names remotely but:
+
+* provides shell completion;
+* provides an option to shuffle list of themes/categories/names returned;
+* makes it easy to print all names in a theme;
+* makes it easy to print all (or some) categories in a theme.
+
+This CLI is more geared towards listing all themes/names/categories instead of
+picking one.
 
 _
     args => {
