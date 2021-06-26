@@ -1,6 +1,8 @@
 package App::metasyn;
 
+# AUTHORITY
 # DATE
+# DIST
 # VERSION
 
 use 5.010001;
@@ -81,7 +83,7 @@ _
             'x.doc.max_result_lines' => 10,
         },
         {
-            summary => 'Return a single random name from the default theme (equivalent of: meta)',
+            summary => 'Return a single random name from the default theme (equivalent to: "meta")',
             argv => [qw/-n1 -R/],
         },
         {
@@ -90,11 +92,11 @@ _
             'x.doc.max_result_lines' => 10,
         },
         {
-            summary => 'List all names from a category of a theme in random order, return only 3 (equivalent of: meta christmas/elf 3)',
+            summary => 'List all names from a category of a theme in random order, return only 3 (equivalent to: "meta christmas/elf 3")',
             argv => [qw(christmas/elf -n3 -R)],
         },
         {
-            summary => 'Return a single random name from a theme (equivalent of: meta christmas)',
+            summary => 'Return a single random name from a theme (equivalent to: "meta christmas")',
             argv => [qw(christmas -n1 -R)],
         },
         {
@@ -104,12 +106,12 @@ _
 
         # listing themes
         {
-            summary => 'List all installed themes (equivalent of: meta --themes)',
+            summary => 'List all installed themes (equivalent to: "meta --themes")',
             argv => [qw/-l/],
             'x.doc.max_result_lines' => 10,
         },
         {
-            summary => 'List 3 random themes (equivalent of: meta --themes | shuf | head -n3)',
+            summary => 'List 3 random themes (equivalent to: "meta --themes | shuf | head -n3")',
             argv => [qw/-l -n3 -R/],
         },
         {
