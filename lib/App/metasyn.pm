@@ -32,13 +32,14 @@ This script is an alternative front-end for <pm:Acme::MetaSyntactic>. Compared
 to the official CLI <prog:meta>, this CLI currently does not retrieve
 themes/names remotely but:
 
-* provides shell completion;
+* provides shell completion (but see <pm:App::ShellCompleter::meta> to add tab
+  completion for the official CLI);
 * provides an option to shuffle list of themes/categories/names returned;
 * makes it easy to print all names in a theme;
 * makes it easy to print all (or some) categories in a theme.
 
 This CLI is more geared towards listing all themes/names/categories instead of
-picking one.
+picking random ones.
 
 _
     args => {
