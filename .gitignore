@@ -2,3 +2,4 @@ App-metasyn-*
 .build
 *~
 nytprof*
+.DS_Store
